@@ -49,6 +49,7 @@ class GUI:
         welcome_desc = ttk.Label(welcome_frame, text="Providing you with hyped stock data.", font=welcome_desc_font)
         welcome_desc.grid(column=0, pady=10)
 
+        # instruction text
         instr = ttk.Label(welcome_frame, text="Instructions:", font=sub_welcome_font_bold, wraplength=600, anchor="w")
         instr.grid(column=0, sticky="w", padx=86)
 
@@ -87,96 +88,59 @@ class GUI:
                 messagebox.showinfo("Invalid Entry", "You did not enter a valid search term.")
                 stock_entry.delete(0, "end")  # clears the entry box if invalid entry
 
-        def get_twitter_data():
-            """
-            Obtains stock mentions from twitter
-            """
+        def get_data(platform):
+            '''
+            Inner function that gets the data from Reddit, Twitter, and Stock API's.
+
+            Takes the platform as a parameter and returns a list of the data.
+            '''
+
             keyword = get_entry()
 
-            twitter_data = twitter_scrape(keyword)
+            data_source = None
+
+            # determines which function to call
+            if platform == "twitter":
+                data_source = twitter_scrape(keyword)
+            if platform == "reddit":
+                data_source = reddit_scrape(keyword)
+            if platform == "stock_price":
+                keyword = get_entry().strip("$")
+                data_source = get_stock_prices(keyword)
 
             day_delta = datetime.timedelta(days=1)
             today = datetime.date.today()
 
-            twitter_data_list = []
+            data_list = []
 
+            # creates list of [dates, mentions]
             for things in range(7):
                 the_day = today - (things * day_delta)
 
                 if the_day.isoweekday() != 6 and the_day.isoweekday() != 7 and the_day != today:
                     the_date = the_day
-                    mentions = twitter_data[the_date]
+                    mentions = data_source[the_date]
 
-                    twitter_data_list.append([the_date, mentions])
+                    data_list.append([the_date, mentions])
 
-            return twitter_data_list
-
-        def get_reddit_data():
-            """
-            Obtains stock mentions from reddit
-            """
-            keyword = get_entry()
-
-            reddit_data = reddit_scrape(keyword)
-
-            day_delta = datetime.timedelta(days=1)
-            today = datetime.date.today()
-
-            reddit_data_list = []
-
-            for things in range(7):
-                the_day = today - (things * day_delta)
-
-                if the_day.isoweekday() != 6 and the_day.isoweekday() != 7 and the_day != today:
-                    the_date = the_day
-                    mentions = reddit_data[the_date]
-
-                    reddit_data_list.append([the_date, mentions])
-
-            return reddit_data_list
-
-        def get_stock_price_data():
-            """
-            Obtains searched stock price data
-            """
-            keyword = get_entry().strip("$")
-
-            stock_price_data = get_stock_prices(keyword)
-
-            # Notifies user if ticker does not exist
-            if stock_price_data == 'no such ticker':
-                messagebox.showinfo("Invalid Entry", "The stock does not exist.")
-                stock_entry.delete(0, "end")  # clears the entry box if invalid entry
-
-            day_delta = datetime.timedelta(days=1)
-            today = datetime.date.today()
-
-            stock_price_list = []
-
-            for things in range(7):
-                the_day = today - (things * day_delta)
-
-                if the_day.isoweekday() != 6 and the_day.isoweekday() != 7 and the_day != today:
-                    the_date = the_day
-                    price = stock_price_data[the_date]
-
-                    stock_price_list.append([the_date, price])
-
-            return stock_price_list
+            return data_list
 
         def create_table():
             """
             Creates display table for twitter and reddit mentions, and stock price
             """
 
-            twitter_data = get_twitter_data()
-            reddit_data = get_reddit_data()
-            stock_price_data = get_stock_price_data()
+            # calls functions to get data to display
+            twitter_data = get_data("twitter")
+            reddit_data = get_data("reddit")
+            stock_price_data = get_data("stock_price")
 
+            # creates table frame
             table_frame = ttk.Frame(self._root)
             table_frame.grid(column=0, row=1, padx=20, pady=5, sticky="ew")
             table_frame.grid_columnconfigure(0, weight=1)
 
+            # creates table foundation - tkinter treeview
             table = ttk.Treeview(table_frame)
             style = ttk.Style()
             style.configure('Treeview', rowheight=20)
@@ -205,18 +169,20 @@ class GUI:
             table.heading('Mention Diff from Prev Day', text='Mention Diff from Prev Day',
                           anchor=CENTER)
 
-            # tests the table format with manually entered data
+            # creates the table
             id = 0
             first_index = 0
 
             for items in range(3):
 
+                # makes sure the dates are all the same one
                 if twitter_data[first_index][0] == reddit_data[first_index][0] and \
                         twitter_data[first_index][0] == stock_price_data[first_index][0] and \
                         reddit_data[first_index][0] == stock_price_data[first_index][0]:
 
                     total = reddit_data[first_index][1] + twitter_data[first_index][1]
 
+                    # calculates mention and price differentials
                     try:
                         prev_total = reddit_data[first_index + 1][1] + twitter_data[first_index + 1][1]
                         prev_price = float(stock_price_data[first_index + 1][1])
@@ -231,6 +197,7 @@ class GUI:
                         mention_diff = "N/A"
                         price_diff = "N/A"
 
+                    # creates the data rows for the table
                     table.insert(parent='', index='end', iid=id, text='', values=(twitter_data[first_index][0],
                                                                                   stock_price_data[first_index][1],
                                                                                   reddit_data[first_index][1],
