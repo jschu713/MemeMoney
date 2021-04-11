@@ -29,5 +29,10 @@ def reddit_scrape(ticker):
         stock_submissions = pd.DataFrame([submission.d_ for submission in api_request_generator])
         data[key] = stock_submissions.size
         end_epoch = start_epoch
-        
+
     return data
+
+if __name__ == "__main__":
+
+    # Testing
+    print(reddit_scrape("$NAKD"))

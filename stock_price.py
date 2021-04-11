@@ -1,6 +1,7 @@
 from alpha_vantage.timeseries import TimeSeries
 import datetime
 import config_stock_price
+from dateutil import parser
 
 # Method returns a dictionary containing date : close price of the stock
 def get_stock_prices(stock_symbol):
@@ -8,7 +9,7 @@ def get_stock_prices(stock_symbol):
     API_KEY = config_stock_price.api_key
 
     # Number of days before today to extract data from
-    NUM_DAYS = 3
+    NUM_DAYS = 7
 
     # Gets daily stock prices from API
     time_series = TimeSeries(key=API_KEY, output_format='json')
@@ -26,9 +27,14 @@ def get_stock_prices(stock_symbol):
     while num_previous_day <= NUM_DAYS:
         previous_date = str(today - datetime.timedelta(days=time_delta))
         if previous_date in data.keys():
-            stock_prices[previous_date] = data[previous_date]['4. close']
+            stock_prices[parser.parse(previous_date).date()] = data[previous_date]['4. close']
             num_previous_day += 1
         time_delta += 1
 
     # Returns a dictionary with dates and close prices
     return stock_prices
+
+if __name__ == "__main__":
+
+    # Testing
+    print(get_stock_prices("ELYS"))

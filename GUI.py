@@ -5,6 +5,8 @@ from tkinter import ttk, messagebox
 from tkinter import *
 
 from twitter_data import twitter_scrape
+from stocks import reddit_scrape
+from stock_price import get_stock_prices
 import datetime
 
 class GUI:
@@ -99,6 +101,8 @@ class GUI:
             day_delta = datetime.timedelta(days=1)
             today = datetime.date.today()
 
+            twitter_data_list = []
+
             for things in range(7):
                 the_day = today - (things * day_delta)
 
@@ -106,11 +110,57 @@ class GUI:
                     the_date = the_day
                     mentions = twitter_data[the_date]
 
-                    return the_date, mentions
+                    twitter_data_list.append([the_date, mentions])
+
+            return twitter_data_list
+
+        def get_reddit_data():
+            keyword = get_entry()
+
+            reddit_data = reddit_scrape(keyword)
+
+            day_delta = datetime.timedelta(days=1)
+            today = datetime.date.today()
+
+            reddit_data_list = []
+
+            for things in range(7):
+                the_day = today - (things * day_delta)
+
+                if the_day.isoweekday() != 6 and the_day.isoweekday() != 7 and the_day != today:
+                    the_date = the_day
+                    mentions = reddit_data[the_date]
+
+                    reddit_data_list.append([the_date, mentions])
+
+            return reddit_data_list
+
+        def get_stock_price_data():
+            keyword = get_entry().strip("$")
+
+            stock_price_data = get_stock_prices(keyword)
+
+            day_delta = datetime.timedelta(days=1)
+            today = datetime.date.today()
+
+            stock_price_list = []
+
+            for things in range(7):
+                the_day = today - (things * day_delta)
+
+                if the_day.isoweekday() != 6 and the_day.isoweekday() != 7 and the_day != today:
+                    the_date = the_day
+                    price = stock_price_data[the_date]
+
+                    stock_price_list.append([the_date, price])
+
+            return stock_price_list
 
         def create_table():
 
             twitter_data = get_twitter_data()
+            reddit_data = get_reddit_data()
+            stock_price_data = get_stock_price_data()
 
             table_frame = ttk.Frame(self._root)
             table_frame.grid(column=0, row=1, padx=20, pady=5, sticky="ew")
@@ -145,10 +195,53 @@ class GUI:
                           anchor=CENTER)
 
             # to test the table format with manually entered data
-            table.insert(parent='', index='end', iid='0', text='', values=('2021-04-08', 52.12, 100, 200, 300, 10, 10))
-            table.insert(parent='', index='end', iid='1', text='', values=(twitter_data[0], 52.12, 100, 200,
-                                                                           twitter_data[1], 10, 10))
+            id = 0
+            first_index = 0
 
+            for items in range(3):
+
+                #if twitter_data[first_index][0] == reddit_data[first_index][0]:
+               if twitter_data[first_index][0] == reddit_data[first_index][0] and \
+                   twitter_data[first_index][0] == stock_price_data[first_index][0] and \
+                   reddit_data[first_index][0] == stock_price_data[first_index][0]:
+
+                    total = reddit_data[first_index][1] + twitter_data[first_index][1]
+
+                   # table.insert(parent='',index='end', iid=id, text='',values=(key, value, 100, 200, 300, 10, 10))
+
+
+                    # table.insert(parent='', index='end', iid=id, text='', values=(twitter_data[first_index][0],
+                    #                                                        stock_price_data[first_index][1],
+                    #                                                        reddit_data[first_index][1],
+                    #                                                        twitter_data[first_index][1],
+                    #                                                        total,
+                    #                                                        10,
+                    #                                                        10))
+
+                    try:
+                        prev_total = reddit_data[first_index+1][1] + twitter_data[first_index+1][1]
+                        prev_price = float(stock_price_data[first_index+1][1])
+
+                        if first_index < 2:
+                            mention_diff = total - prev_total
+                            price_diff = round(float(stock_price_data[first_index][1]) - prev_price, 3)
+                        else:
+                            mention_diff = "N/A"
+                            price_diff = "N/A"
+                    except IndexError:
+                        mention_diff = "N/A"
+                        price_diff = "N/A"
+
+                    table.insert(parent='', index='end', iid=id, text='', values=(twitter_data[first_index][0],
+                                                                                      stock_price_data[first_index][1],
+                                                                                      reddit_data[first_index][1],
+                                                                                      twitter_data[first_index][1],
+                                                                                      total,
+                                                                                      price_diff,
+                                                                                      mention_diff))
+
+                    id += 1
+                    first_index += 1
 
             table.pack(pady=20)
 
