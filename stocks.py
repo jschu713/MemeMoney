@@ -34,5 +34,3 @@ def reddit_scrape(ticker):
     # return data
 
 print(reddit_scrape('nakd'))
-
-# https://us04web.zoom.us/j/71755523913?pwd=QVlaR1AwUWhNWnNRejJLbExoMlp3UT09
