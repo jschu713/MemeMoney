@@ -53,7 +53,7 @@ def twitter_scrape(keyword):
         # Define date ranges we are searching.
         day_delta = datetime.timedelta(days=1)
         today = datetime.date.today()
-        end_time = today - 3 * day_delta
+        end_time = today - 6 * day_delta
 
         # Searches for tweets with specified keyword and creates list of dates
         tweets = tw.Cursor(api.search, q=ignore_rts, lan="en", since=end_time,).items()
@@ -81,3 +81,4 @@ if __name__ == "__main__":
 
     # Testing
     print(twitter_scrape("$ELYS"))
+    print(twitter_scrape("$TXN"))
