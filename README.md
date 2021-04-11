@@ -3,7 +3,9 @@
 ### Goal
 This is a project created for the Spring 2021 BeaverHacks hackathon. 
 The theme of the hackathon was FinTech and the scope was broad. This project
-was created as a group consisting of @jschu713, @jennyxchang, and @vborder.
+was created as a group consisting of [@jschu713](http://www.github.com/jsch713),
+[@jennyxchang](http://www.github.com/jennyxchang), and 
+[@vborder](http://www.github.com/vborder).
 
 ### Purpose
 Not just for sharing moments with friends, family, and internet strangers, 
