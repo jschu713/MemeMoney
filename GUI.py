@@ -2,8 +2,9 @@ import tkinter as tk
 import tkinter.font
 from ttkthemes import ThemedTk
 from tkinter import ttk, messagebox
+from tkinter import *
 
-from twitter_data import twitter
+from twitter_data import twitter_scrape
 
 class GUI:
     '''
@@ -18,6 +19,15 @@ class GUI:
         self._root.configure(bg="#f5f6f7")
         self._root.grid_columnconfigure(0, weight=1)
         self._root.geometry("800x600")
+
+    # def create_table_frame(self):
+    #     # creates the frame w/ style, size, position
+    #     table_frame = ttk.Frame(self._root)
+    #     table_frame.grid(column=0, row=1, padx=20, pady=5, sticky="ew")
+    #     table_frame.grid_columnconfigure(0, weight=1)
+    #
+    #     test = ttk.Label(table_frame, text="Table Goes Here", foreground="#000000")
+    #     test.grid(column=0)
 
     def create_welcome_frame(self):
         '''
@@ -80,9 +90,52 @@ class GUI:
                 messagebox.showinfo("Invalid Entry", "You did not enter a valid search term.")
                 stock_entry.delete(0, "end")            # clears the entry box if invalid entry
 
+        def create_table():
+            keyword = get_entry()
+
+            table_frame = ttk.Frame(self._root)
+            table_frame.grid(column=0, row=1, padx=20, pady=5, sticky="ew")
+            table_frame.grid_columnconfigure(0, weight=1)
+
+            twitter_scrape(keyword)
+
+            table = ttk.Treeview(table_frame)
+            style = ttk.Style()
+            style.configure('Treeview', rowheight=25)
+
+            table['columns'] = ('Date', 'Close Price', 'Reddit Mentions', 'Twitter Mentions', 'Total Mentions',
+                                'Price Diff from Prev Day', 'Mention Diff from Prev Day')
+            table.column('#0', width=0, stretch=NO)
+            table.column('Date', anchor=CENTER, width=75)
+            table.column('Close Price', anchor=CENTER, width=75)
+
+            table.column('Reddit Mentions', anchor=CENTER, width=100)
+            table.column('Twitter Mentions', anchor=CENTER, width=100)
+            table.column('Total Mentions', anchor=CENTER, width=100)
+            table.column('Price Diff from Prev Day', anchor=CENTER, width=150)
+            table.column('Mention Diff from Prev Day', anchor=CENTER, width=150)
+
+            table.heading('#0', text='', anchor=W)
+            table.heading('Date', text='Date', anchor=CENTER)
+            table.heading('Close Price', text='Close Price', anchor=CENTER)
+
+            table.heading('Reddit Mentions', text='Reddit Mentions', anchor=CENTER)
+            table.heading('Twitter Mentions', text='Twitter Mentions', anchor=CENTER)
+            table.heading('Total Mentions', text='Total Mentions', anchor=CENTER)
+            table.heading('Price Diff from Prev Day', text='Price Diff from Prev Day',
+                          anchor=CENTER)
+            table.heading('Mention Diff from Prev Day', text='Mention Diff from Prev Day',
+                          anchor=CENTER)
+
+            # to test the table format with manually entered data
+            table.insert(parent='', index='end', iid='0', text='', values=('2021-04-08', 52.12, 100, 200, 300, 10, 10))
+            table.pack(pady=20)
+
         # button that when pushed retrieves the user entered keyword
-        search_button = ttk.Button(welcome_frame, text="Get Results", command=lambda: [twitter(get_entry())])
+        search_button = ttk.Button(welcome_frame, text="Get Results", command=lambda: [create_table()])
         search_button.grid(column=0, pady=10)
+
+
 
     def end(self):
         '''

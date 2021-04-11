@@ -22,7 +22,7 @@ import tweepy as tw
 #
 # @timer
 
-def twitter(keyword):
+def twitter_scrape(keyword):
         '''
         The twitter function initializes the API authentication and gets all mentions of a specified
         stock symbol within a 3 day period from the current date.
@@ -78,4 +78,6 @@ def twitter(keyword):
             return data
 
 if __name__ == "__main__":
-    print(twitter("$ELYS"))
+
+    # Testing
+    print(twitter_scrape("$ELYS"))
