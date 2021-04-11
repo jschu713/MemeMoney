@@ -22,7 +22,7 @@ class GUI:
 
         self._root = ThemedTk(theme="arc")
         self._root.title("MemeMoney")
-        self._root.iconbitmap("mememoney.ico")
+        self._root.iconbitmap("Exe\mememoney.ico")
         self._root.configure(bg="#f5f6f7")
         self._root.grid_columnconfigure(0, weight=1)
         self._root.geometry("800x600")
