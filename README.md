@@ -30,11 +30,6 @@ the current date, excluding weekends. It then creates a table displaying:
 ### <ins>How to use it:</ins>
 
 #### Opening
-WINDOWS ONLY
-Download the MemeMoney.exe and the mememoney.ico file (make sure they
-are in the same folder) and run MemeMoney.exe. 
-
-ALL OTHERS
 Run the GUI.py file.
 
 #### Using
