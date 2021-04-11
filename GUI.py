@@ -99,19 +99,22 @@ class GUI:
             day_delta = datetime.timedelta(days=1)
             today = datetime.date.today()
 
-
             for things in range(7):
                 the_day = today - (things * day_delta)
 
                 if the_day.isoweekday() != 6 and the_day.isoweekday() != 7 and the_day != today:
                     the_date = the_day
+                    mentions = twitter_data[the_date]
+
+                    return the_date, mentions
 
         def create_table():
+
+            twitter_data = get_twitter_data()
 
             table_frame = ttk.Frame(self._root)
             table_frame.grid(column=0, row=1, padx=20, pady=5, sticky="ew")
             table_frame.grid_columnconfigure(0, weight=1)
-
 
             table = ttk.Treeview(table_frame)
             style = ttk.Style()
@@ -143,12 +146,15 @@ class GUI:
 
             # to test the table format with manually entered data
             table.insert(parent='', index='end', iid='0', text='', values=('2021-04-08', 52.12, 100, 200, 300, 10, 10))
+            table.insert(parent='', index='end', iid='1', text='', values=(twitter_data[0], 52.12, 100, 200,
+                                                                           twitter_data[1], 10, 10))
+
+
             table.pack(pady=20)
 
         # button that when pushed retrieves the user entered keyword
         search_button = ttk.Button(welcome_frame, text="Get Results", command=lambda: [create_table()])
         search_button.grid(column=0, pady=10)
-
 
 
     def end(self):
