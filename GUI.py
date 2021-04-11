@@ -5,6 +5,7 @@ from tkinter import ttk, messagebox
 from tkinter import *
 
 from twitter_data import twitter_scrape
+import datetime
 
 class GUI:
     '''
@@ -90,14 +91,27 @@ class GUI:
                 messagebox.showinfo("Invalid Entry", "You did not enter a valid search term.")
                 stock_entry.delete(0, "end")            # clears the entry box if invalid entry
 
-        def create_table():
+        def get_twitter_data():
             keyword = get_entry()
+
+            twitter_data = twitter_scrape(keyword)
+
+            day_delta = datetime.timedelta(days=1)
+            today = datetime.date.today()
+
+
+            for things in range(7):
+                the_day = today - (things * day_delta)
+
+                if the_day.isoweekday() != 6 and the_day.isoweekday() != 7 and the_day != today:
+                    the_date = the_day
+
+        def create_table():
 
             table_frame = ttk.Frame(self._root)
             table_frame.grid(column=0, row=1, padx=20, pady=5, sticky="ew")
             table_frame.grid_columnconfigure(0, weight=1)
 
-            twitter_scrape(keyword)
 
             table = ttk.Treeview(table_frame)
             style = ttk.Style()
