@@ -9,33 +9,27 @@ from stocks import reddit_scrape
 from stock_price import get_stock_prices
 import datetime
 
+
 class GUI:
-    '''
+    """
     The GUI class
-    '''
+    """
 
     def __init__(self):
+        """
+        Creates the main window and sets themes, style, and size
+        """
 
-        # creates the main window, sets thems, style, and, size
         self._root = ThemedTk(theme="arc")
         self._root.title("MemeMoney")
         self._root.configure(bg="#f5f6f7")
         self._root.grid_columnconfigure(0, weight=1)
         self._root.geometry("800x600")
 
-    # def create_table_frame(self):
-    #     # creates the frame w/ style, size, position
-    #     table_frame = ttk.Frame(self._root)
-    #     table_frame.grid(column=0, row=1, padx=20, pady=5, sticky="ew")
-    #     table_frame.grid_columnconfigure(0, weight=1)
-    #
-    #     test = ttk.Label(table_frame, text="Table Goes Here", foreground="#000000")
-    #     test.grid(column=0)
-
     def create_welcome_frame(self):
-        '''
+        """
         Creates the frame in which the title, subtitle, keyword request, and data will be displayed.
-        '''
+        """
 
         # sets font
         welcome_font = tk.font.Font(size=24, weight="bold")
@@ -76,9 +70,9 @@ class GUI:
         stock_entry.grid(column=0, pady=10)
 
         def get_entry():
-            '''
+            """
             Inner function that retrieves the user entered term to provide keyword to search
-            '''
+            """
 
             attempted_keyword = stock_entry.get()
 
@@ -91,9 +85,12 @@ class GUI:
             # else messagebox pops up and provides an error
             else:
                 messagebox.showinfo("Invalid Entry", "You did not enter a valid search term.")
-                stock_entry.delete(0, "end")            # clears the entry box if invalid entry
+                stock_entry.delete(0, "end")  # clears the entry box if invalid entry
 
         def get_twitter_data():
+            """
+            Obtains stock mentions from twitter
+            """
             keyword = get_entry()
 
             twitter_data = twitter_scrape(keyword)
@@ -115,6 +112,9 @@ class GUI:
             return twitter_data_list
 
         def get_reddit_data():
+            """
+            Obtains stock mentions from reddit
+            """
             keyword = get_entry()
 
             reddit_data = reddit_scrape(keyword)
@@ -136,6 +136,9 @@ class GUI:
             return reddit_data_list
 
         def get_stock_price_data():
+            """
+            Obtains searched stock price data
+            """
             keyword = get_entry().strip("$")
 
             stock_price_data = get_stock_prices(keyword)
@@ -162,6 +165,9 @@ class GUI:
             return stock_price_list
 
         def create_table():
+            """
+            Creates display table for twitter and reddit mentions, and stock price
+            """
 
             twitter_data = get_twitter_data()
             reddit_data = get_reddit_data()
@@ -173,7 +179,7 @@ class GUI:
 
             table = ttk.Treeview(table_frame)
             style = ttk.Style()
-            style.configure('Treeview', rowheight=25)
+            style.configure('Treeview', rowheight=20)
 
             table['columns'] = ('Date', 'Close Price', 'Reddit Mentions', 'Twitter Mentions', 'Total Mentions',
                                 'Price Diff from Prev Day', 'Mention Diff from Prev Day')
@@ -199,33 +205,21 @@ class GUI:
             table.heading('Mention Diff from Prev Day', text='Mention Diff from Prev Day',
                           anchor=CENTER)
 
-            # to test the table format with manually entered data
+            # tests the table format with manually entered data
             id = 0
             first_index = 0
 
             for items in range(3):
 
-                #if twitter_data[first_index][0] == reddit_data[first_index][0]:
-               if twitter_data[first_index][0] == reddit_data[first_index][0] and \
-                   twitter_data[first_index][0] == stock_price_data[first_index][0] and \
-                   reddit_data[first_index][0] == stock_price_data[first_index][0]:
+                if twitter_data[first_index][0] == reddit_data[first_index][0] and \
+                        twitter_data[first_index][0] == stock_price_data[first_index][0] and \
+                        reddit_data[first_index][0] == stock_price_data[first_index][0]:
 
                     total = reddit_data[first_index][1] + twitter_data[first_index][1]
 
-                   # table.insert(parent='',index='end', iid=id, text='',values=(key, value, 100, 200, 300, 10, 10))
-
-
-                    # table.insert(parent='', index='end', iid=id, text='', values=(twitter_data[first_index][0],
-                    #                                                        stock_price_data[first_index][1],
-                    #                                                        reddit_data[first_index][1],
-                    #                                                        twitter_data[first_index][1],
-                    #                                                        total,
-                    #                                                        10,
-                    #                                                        10))
-
                     try:
-                        prev_total = reddit_data[first_index+1][1] + twitter_data[first_index+1][1]
-                        prev_price = float(stock_price_data[first_index+1][1])
+                        prev_total = reddit_data[first_index + 1][1] + twitter_data[first_index + 1][1]
+                        prev_price = float(stock_price_data[first_index + 1][1])
 
                         if first_index < 2:
                             mention_diff = total - prev_total
@@ -238,12 +232,12 @@ class GUI:
                         price_diff = "N/A"
 
                     table.insert(parent='', index='end', iid=id, text='', values=(twitter_data[first_index][0],
-                                                                                      stock_price_data[first_index][1],
-                                                                                      reddit_data[first_index][1],
-                                                                                      twitter_data[first_index][1],
-                                                                                      total,
-                                                                                      price_diff,
-                                                                                      mention_diff))
+                                                                                  stock_price_data[first_index][1],
+                                                                                  reddit_data[first_index][1],
+                                                                                  twitter_data[first_index][1],
+                                                                                  total,
+                                                                                  price_diff,
+                                                                                  mention_diff))
 
                     id += 1
                     first_index += 1
@@ -252,26 +246,16 @@ class GUI:
 
         # button that when pushed retrieves the user entered keyword
         search_button = ttk.Button(welcome_frame, text="Get Results", command=lambda: [create_table()])
-        search_button.grid(column=0, pady=10)
-
+        search_button.grid(column=0, pady=5)
 
     def end(self):
-        '''
+        """
         Closes out the root for the GUI
-        '''
+        """
 
         return self._root.mainloop()
+
 
 gui = GUI()
 gui.create_welcome_frame()
 gui.end()
-
-
-
-
-
-
-
-
-
-
