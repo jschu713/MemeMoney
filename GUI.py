@@ -11,14 +11,14 @@ import datetime
 
 
 class GUI:
-    '''
+    """
     The GUI class
-    '''
+    """
 
     def __init__(self):
-        '''
+        """
         Creates the main window and sets themes, style, and size
-        '''
+        """
 
         self._root = ThemedTk(theme="arc")
         self._root.title("MemeMoney")
@@ -27,9 +27,9 @@ class GUI:
         self._root.geometry("800x600")
 
     def create_welcome_frame(self):
-        '''
+        """
         Creates the frame in which the title, subtitle, keyword request, and data will be displayed.
-        '''
+        """
 
         # sets font
         welcome_font = tk.font.Font(size=24, weight="bold")
@@ -70,9 +70,9 @@ class GUI:
         stock_entry.grid(column=0, pady=10)
 
         def get_entry():
-            '''
+            """
             Inner function that retrieves the user entered term to provide keyword to search
-            '''
+            """
 
             attempted_keyword = stock_entry.get()
 
@@ -88,6 +88,9 @@ class GUI:
                 stock_entry.delete(0, "end")  # clears the entry box if invalid entry
 
         def get_twitter_data():
+            """
+            Obtains stock mentions from twitter
+            """
             keyword = get_entry()
 
             twitter_data = twitter_scrape(keyword)
@@ -109,6 +112,9 @@ class GUI:
             return twitter_data_list
 
         def get_reddit_data():
+            """
+            Obtains stock mentions from reddit
+            """
             keyword = get_entry()
 
             reddit_data = reddit_scrape(keyword)
@@ -130,6 +136,9 @@ class GUI:
             return reddit_data_list
 
         def get_stock_price_data():
+            """
+            Obtains searched stock price data
+            """
             keyword = get_entry().strip("$")
 
             stock_price_data = get_stock_prices(keyword)
@@ -156,9 +165,9 @@ class GUI:
             return stock_price_list
 
         def create_table():
-            '''
+            """
             Creates display table for twitter and reddit mentions, and stock price
-            '''
+            """
 
             twitter_data = get_twitter_data()
             reddit_data = get_reddit_data()
@@ -240,9 +249,9 @@ class GUI:
         search_button.grid(column=0, pady=10)
 
     def end(self):
-        '''
+        """
         Closes out the root for the GUI
-        '''
+        """
 
         return self._root.mainloop()
 
