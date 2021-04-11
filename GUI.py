@@ -170,7 +170,7 @@ class GUI:
 
             table = ttk.Treeview(table_frame)
             style = ttk.Style()
-            style.configure('Treeview', rowheight=25)
+            style.configure('Treeview', rowheight=20)
 
             table['columns'] = ('Date', 'Close Price', 'Reddit Mentions', 'Twitter Mentions', 'Total Mentions',
                                 'Price Diff from Prev Day', 'Mention Diff from Prev Day')
@@ -237,7 +237,7 @@ class GUI:
 
         # button that when pushed retrieves the user entered keyword
         search_button = ttk.Button(welcome_frame, text="Get Results", command=lambda: [create_table()])
-        search_button.grid(column=0, pady=10)
+        search_button.grid(column=0, pady=5)
 
     def end(self):
         '''
