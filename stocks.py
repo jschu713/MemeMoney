@@ -30,7 +30,9 @@ def reddit_scrape(ticker):
         data[key] = stock_submissions.size
         end_epoch = start_epoch
 
-    print(data)
-    # return data
+    return data
 
-print(reddit_scrape('nakd'))
+if __name__ == "__main__":
+
+    # Testing
+    print(reddit_scrape("$NAKD"))
