@@ -28,12 +28,15 @@ the current date, excluding weekends. It then creates a table displaying:
 * the mention differential from the previous day
 
 Simply run GUI.py and enter a stock ticker symbol (letters only) and 
-MemeMoney will display the results. 
+MemeMoney will display the results.
 
 An example execution:
 
 ![Alt Text](https://i.imgur.com/22DqaDf.jpg)
 
 
-*Due to free API limitations, MemeMoney is unable to track realtime stock data
-and social media mentions.
+*Due to free API limitations, MemeMoney will
+have a long runtime for more popular stocks due to API request timeouts.
+Due to the same limitations, MemeMoney is also unable to track realtime 
+stock data and social media mentions.
+
