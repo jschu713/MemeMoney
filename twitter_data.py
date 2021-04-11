@@ -67,7 +67,7 @@ def twitter_scrape(keyword):
             the_day = today - (things * day_delta)
 
             if the_day.isoweekday() != 6 and the_day.isoweekday() != 7 and the_day != today:
-                data[today - (things * day_delta)] = 0
+                data[the_day] = 0
 
         # increases mention counter by 1 every time a data appears in the tweets_list
         for items in tweets_list:
