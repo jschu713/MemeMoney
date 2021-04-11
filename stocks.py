@@ -30,5 +30,7 @@ def reddit_scrape(ticker):
         data[key] = stock_submissions.size
         end_epoch = start_epoch
 
-    return data
+    print(data)
+    # return data
 
+print(reddit_scrape('nakd'))
