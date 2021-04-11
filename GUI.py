@@ -109,6 +109,12 @@ class GUI:
                 keyword = get_entry().strip("$")
                 data_source = get_stock_prices(keyword)
 
+            # if stock does not exist return nothing
+            if data_source == "no such ticker":
+                messagebox.showinfo("Invalid Entry", "Stock does not exist.")
+                stock_entry.delete(0, "end")  # clears the entry box if invalid entry
+                return
+
             day_delta = datetime.timedelta(days=1)
             today = datetime.date.today()
 
@@ -135,6 +141,10 @@ class GUI:
             twitter_data = get_data("twitter")
             reddit_data = get_data("reddit")
             stock_price_data = get_data("stock_price")
+
+            # if stock does not exist return nothing
+            if stock_price_data is None:
+                return
 
             # creates table frame
             table_frame = ttk.Frame(self._root)
