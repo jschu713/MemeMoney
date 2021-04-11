@@ -140,6 +140,11 @@ class GUI:
 
             stock_price_data = get_stock_prices(keyword)
 
+            # Notifies user if ticker does not exist
+            if stock_price_data == 'no such ticker':
+                messagebox.showinfo("Invalid Entry", "The stock does not exist.")
+                stock_entry.delete(0, "end")  # clears the entry box if invalid entry
+
             day_delta = datetime.timedelta(days=1)
             today = datetime.date.today()
 
