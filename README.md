@@ -1,20 +1,20 @@
 # MemeMoney
 
-### Goal
+### <ins>Goal</ins>
 This is a project created for the Spring 2021 BeaverHacks hackathon. 
 The theme of the hackathon was FinTech and the scope was broad. This project
 was created as a group consisting of [@jschu713](http://www.github.com/jsch713),
 [@jennyxchang](http://www.github.com/jennyxchang), and 
 [@vborder](http://www.github.com/vborder).
 
-### Purpose
+### <ins>Purpose</ins>
 Not just for sharing moments with friends, family, and internet strangers, 
 social media sites have begun to even influence financial markets. 
 Meme stocks--stocks that have increased in value not due to performance, 
 but social media hype--heavily favor early adopters who enter and exit 
 at the right time. 
 
-### How it works:
+### <ins>How it works:</ins>
 
 MemeMoney allows you to follow the hype around a stock.* It tracks the
 number of mentions of stock ticker symbol on  two popular social media sites--
@@ -27,8 +27,19 @@ the current date, excluding weekends. It then creates a table displaying:
 * the price differential from the previous day, and
 * the mention differential from the previous day
 
-Simply run GUI.py and enter a stock ticker symbol (letters only) and 
-MemeMoney will display the results.
+### <ins>How to use it:</ins>
+
+#### Opening
+WINDOWS ONLY
+Download the MemeMoney.exe and the mememoney.ico file (make sure they
+are in the same folder) and run MemeMoney.exe. 
+
+ALL OTHERS
+Run the GUI.py file.
+
+#### Using
+Then simply enter a stock ticker symbol (letters only) and 
+the application will display the results.
 
 An example execution:
 
@@ -37,6 +48,6 @@ An example execution:
 
 *Due to free API limitations, MemeMoney will
 have a long runtime for more popular stocks due to API request timeouts.
-Due to the same limitations, MemeMoney is also unable to track realtime 
+Due to the same limitations, MemeMoney is also unable to track real time 
 stock data and social media mentions.
 
